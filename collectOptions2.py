@@ -51,7 +51,7 @@ will take in etf or stock name and if available on yahoo finance will collect fu
 expiration data by the minute for the closest upcoming expiration date. The program will run 
 until market close. A CSV file is generated to my desktop folder named Options.
 '''
-def getOptionPrices(etfName):
+def getOptionPrices(etfName,file_name):
     current_time = datetime.datetime.now().time()
     #checks to see if market is open. If it is creates paths for files and allows main loop to run.
     #else it will set currentEtfCompleted to True and main loop will not run because the market isn't open.
@@ -59,7 +59,7 @@ def getOptionPrices(etfName):
         print "Market is Open. Data will start to collect."
         checkName = False
         while checkName == False:
-            file_name = raw_input("Please enter file name for csv file: ")
+            file_name = file_name
             checkName = checkFileName(file_name)
         #TO DO: path should be changed.
         save_path = 'C:\\Users\\rroethle_he\\Desktop\\Options\\'
@@ -70,6 +70,7 @@ def getOptionPrices(etfName):
         print "Market is Closed, no data to collect."
         currentEtfCompleted = True
         dailyOptionsList = []
+        return False
     #yahoo finance base url is used for creating options quotes.
     urlBase='http://finance.yahoo.com'
     #<TO DO> will use later to check later expiration dates - urlIndex
@@ -85,6 +86,7 @@ def getOptionPrices(etfName):
         else:
             print "Market is Closed, no data to collect."
             currentEtfCompleted = True
+            return False
         if urlIndex==0:
             #creates suffix to navigate to closest options expiration page.
             urlSuffix=urlSuffix='/q/op?s='+etfName+'+Options'
@@ -250,11 +252,13 @@ def display_header():
 
 
 #main function for running program and collecting data
-if __name__ == '__main__':
-    enter_stock_symbol = False
-    display_header()
-    while enter_stock_symbol == False:
-        user_input = raw_input("Please enter stock symbol interested in tracking? ")
-        enter_stock_symbol = checkStockSymbol(user_input)
-        if enter_stock_symbol == True:
-            end_result = getOptionPrices(user_input)
+#if __name__ == '__main__':
+    #enter_stock_symbol = False
+#     display_header()
+#     while enter_stock_symbol == False:
+#         user_input = raw_input("Please enter stock symbol interested in tracking? ")
+#         enter_stock_symbol = checkStockSymbol(user_input)
+#         if enter_stock_symbol == True:
+#             end_result = getOptionPrices(user_input)
+
+
