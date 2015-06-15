@@ -62,7 +62,8 @@ def getOptionPrices(etfName):
             file_name = raw_input("Please enter file name for csv file: ")
             checkName = checkFileName(file_name)
         #TO DO: path should be changed.
-        save_path = 'C:\\Users\\rroethle_he\\Desktop\\Options\\'
+        #save_path = 'C:\\Users\\rroethle_he\\Desktop\\Options\\'
+        save_path =""
         completeNameCSV = os.path.join(save_path,file_name + ".csv")
         completeNameJSON = os.path.join(save_path,file_name + ".json")
         currentEtfCompleted = False
@@ -126,7 +127,7 @@ def getOptionPrices(etfName):
             #mainTables[i]=superParentsOfMainTables[i].findAll('tbody')
         tableIndex=0
         #adds header row to results and appends.
-        header_row = ["StockSymbol","Options Symbol", "Strike", "Expiration Date", "OptionType","Price","Bid","Ask","Volume","Open Interest"]
+        header_row = ["StockSymbol","Options Symbol", "Strike", "Expiration Date", "OptionType","Price","Bid","Ask","Volume","Open Interest","Time"]
         optionsResults=[]
         optionsResults.append(header_row)
         #placeholders for option symbols and types.
@@ -198,16 +199,19 @@ def getOptionPrices(etfName):
                     elif j==8:
                         #collects open interest - 9th column
                         open_interest = mainTables[tableIndex].find_all('tr', limit = i+1)[-1].find_all('td', limit = j+1)[-1].contents[1].string
-                #appends all of the results collected as one list item      
-                appendedResults=[stockSymbol,optionSymbol, strike, expiryDate, optionType,price,bid,ask,volume,open_interest]#, last, dailyValueChange, specialType]
+                #appends all of the results collected as one list item
+                time_append = datetime.datetime.now()
+                new_time_append = time_append.replace(second = 0,microsecond = 0)
+                new_time_append = str(new_time_append)[-8:-3]
+                appendedResults=[stockSymbol,optionSymbol, strike, expiryDate, optionType,price,bid,ask,volume,open_interest,new_time_append]#, last, dailyValueChange, specialType]
                 #list of all things that should be appended into optionsresults:          
                 optionsResults.append(appendedResults)
         #appends all results to daily collection file
         dailyOptionsList.append(optionsResults)
         #creates csv file with name given above
-        with open(completeNameCSV,"wb") as output_file:
+        with open(completeNameCSV,"ab") as output_file:
             writer = csv.writer(output_file)
-            writer.writerows(dailyOptionsList)
+            writer.writerows(optionsResults)
             output_file.close()
         #TO DO fix JSON Output
         #with open(completeNameJSON,"wb") as outfile:

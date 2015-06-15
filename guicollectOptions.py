@@ -19,7 +19,8 @@ except ImportError:
     py3 = 1
 
 import options_file_support
-
+import thread
+import time
 
 
 
@@ -56,9 +57,9 @@ def destroy_New_Toplevel_1():
 def go(stock_value,file_name):
     enter_stock_symbol = False
     #display_header()
-    while enter_stock_symbol == False:
+    if enter_stock_symbol == False:
         user_input = stock_value
-        print user_input
+        print "User Input",user_input
         enter_stock_symbol = checkStockSymbol(user_input)
         if enter_stock_symbol == True:
             end_result = getOptionPrices(user_input,file_name)
@@ -70,6 +71,7 @@ def go(stock_value,file_name):
                 new_text = Text(root,height=2, width = 30)
                 new_text.pack()
                 new_text.insert(END,"Collecting Data")
+                #root.after(100000,go(stock_value,file_name))
 
 class New_Toplevel_1:
     def __init__(self, master=None):
@@ -108,7 +110,7 @@ class New_Toplevel_1:
         self.Label1.configure(highlightcolor="black")
         self.Label1.configure(text='''Options Data Collector''')
 
-        self.start_button = Button(text="Start",command=lambda: go(self.stock_symbol_input.get("1.0",END),self.file_name_input.get("1.0",END)))
+        self.start_button = Button(text="Start",command=lambda: self.start_button.after(100000,go(self.stock_symbol_input.get("1.0",'end-1c'),self.file_name_input.get("1.0",'end-1c'))))
         self.start_button.place(relx=0.21, rely=0.52, height=24, width=67)
         self.start_button.configure(activebackground="#d9d9d9")
         self.start_button.configure(activeforeground="#000000")
@@ -134,7 +136,7 @@ class New_Toplevel_1:
         self.file_name_input.configure(width=74)
         self.file_name_input.configure(wrap=WORD)
 
-        self.stop_button = Button(master)
+        self.stop_button = Button(master, command="break")
         self.stop_button.place(relx=0.56, rely=0.52, height=24, width=67)
         self.stop_button.configure(activebackground="#d9d9d9")
         self.stop_button.configure(activeforeground="#000000")
@@ -190,4 +192,3 @@ class New_Toplevel_1:
 
 if __name__ == '__main__':
     vp_start_gui()
-

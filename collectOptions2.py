@@ -22,17 +22,19 @@ import json
 #globals that shouldn't change unless market_times change.
 placeholder_time = datetime.datetime.now().time()
 market_open = placeholder_time.replace(hour=8, minute=30, second=0, microsecond=0) 
-market_close = placeholder_time.replace(hour=15, minute=0, second=0, microsecond=0)
+market_close = placeholder_time.replace(hour=23, minute=0, second=0, microsecond=0)
 
 '''
 file checks for input errors using special characters.
 '''
 def checkFileName(input_text):
     #I don't want special characters in file names, this function checks for that.
+    print input_text
     if re.match("^[A-Za-z0-9]+$",input_text):
         return True
     else:
         print "Value entered must not contain numbers, Please re-enter file name: "
+        print input_text
         return False
 
 def checkStockSymbol(stock_input):
@@ -58,11 +60,12 @@ def getOptionPrices(etfName,file_name):
     if current_time >= market_open and current_time <= market_close:
         print "Market is Open. Data will start to collect."
         checkName = False
-        while checkName == False:
+        if checkName == False:
             file_name = file_name
             checkName = checkFileName(file_name)
         #TO DO: path should be changed.
-        save_path = 'C:\\Users\\rroethle_he\\Desktop\\Options\\'
+        #save_path = 'C:\\Users\\rroethle_he\\Desktop\\Options\\'
+        save_path = ""
         completeNameCSV = os.path.join(save_path,file_name + ".csv")
         completeNameJSON = os.path.join(save_path,file_name + ".json")
         currentEtfCompleted = False
@@ -76,7 +79,8 @@ def getOptionPrices(etfName,file_name):
     #<TO DO> will use later to check later expiration dates - urlIndex
     urlIndex=0
     #-------------------------------begin url loop:-------------------------------------
-    while currentEtfCompleted==False:
+    for i in range(1):
+    #while currentEtfCompleted==False:
         #used to collect minute by minute snapshot of all the options expirations.
         dailyOptionsList = []
         current_time = datetime.datetime.now().time()
